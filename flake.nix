@@ -69,13 +69,29 @@
           pkgs = pkgsFor system;
           tc = mkToolchains { inherit pkgs; registry = baseRegistry // self.registryFragment; };
           isDarwin = builtins.elem system darwinSystems;
-        in
-        (if isDarwin then {
-          phoon-macos = tc.buildForMacOS "phoon" { };
+          # Host-native CLI: macOS on Darwin, Linux elsewhere. Use this for
+          # `nix run .#phoon` / `nix run .` — Nix already knows the host.
+          # Mobile cross targets stay under their explicit attrs.
+          hostPhoon =
+            if isDarwin then tc.buildForMacOS "phoon" { }
+            else tc.buildForLinux "phoon" { };
+        in {
+          phoon = hostPhoon;
+          default = hostPhoon;
+        } // (if isDarwin then {
+          phoon-macos = hostPhoon;
           phoon-ios = tc.buildForIOS "phoon" { };
         } else {
-          phoon-linux = tc.buildForLinux "phoon" { };
+          phoon-linux = hostPhoon;
         }));
+
+      apps = forAll (system: {
+        phoon = {
+          type = "app";
+          program = "${self.packages.${system}.phoon}/bin/phoon";
+        };
+        default = self.apps.${system}.phoon;
+      });
 
       formatter = forAll (system: (pkgsFor system).nixfmt-rfc-style);
     };

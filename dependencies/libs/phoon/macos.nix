@@ -27,6 +27,12 @@ pkgs.rustPlatform.buildRustPackage {
   CARGO_BUILD_TARGET = cargoTarget;
   doCheck = false;
 
+  meta = {
+    mainProgram = "phoon";
+    description = "Clean-room Rust phoon (ASCII moon phase)";
+    license = lib.licenses.mit;
+  };
+
   preConfigure = ''
     MACOS_SDK=$(xcrun --sdk macosx --show-sdk-path 2>/dev/null || true)
     if [ ! -d "$MACOS_SDK" ]; then

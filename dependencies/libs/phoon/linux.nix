@@ -20,6 +20,12 @@ pkgs.rustPlatform.buildRustPackage {
   cargoLock.lockFile = ./Cargo.lock;
   doCheck = false;
 
+  meta = {
+    mainProgram = "phoon";
+    description = "Clean-room Rust phoon (ASCII moon phase)";
+    license = lib.licenses.mit;
+  };
+
   preConfigure = ''
     export RUSTFLAGS="-A warnings $RUSTFLAGS"
   '';

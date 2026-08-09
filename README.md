@@ -101,7 +101,15 @@ dependencies/libs/phoon/   per-platform Nix staticlib recipes
 ```bash
 cargo build --release          # CLI + static/rlib/cdylib
 cargo test                     # unit + compatibility tests
-nix build .#phoon-macos        # static lib for macOS (from Wawona toolchain)
+
+# Host-native CLI (macOS on Darwin, Linux on Linux):
+nix run .#phoon
+nix run .                      # same — default app/package is host phoon
+nix run .#phoon -- -l 18
+
+# Explicit platform packages (also used by Wawona):
+nix build .#phoon-macos        # Darwin hosts
+nix build .#phoon-linux        # Linux hosts
 ```
 
 ## Wawona integration
