@@ -93,6 +93,12 @@ myRustPlatform.buildRustPackage {
 
   buildPhase = ''
     runHook preBuild
+    # Force native objects into libphoon_rs.a. Cargo.toml sets `lto = true`,
+    # which leaves LLVM bitcode in the archive; Rust's LLVM is far newer than
+    # Xcode's ld64/nm, so bitcode breaks nmedit privatization AND the final
+    # -force_load in-process link ("Unknown attribute kind"). wwn-niri disables
+    # LTO for the exact same reason.
+    export CARGO_PROFILE_RELEASE_LTO=false
     cargo build --lib --target ${cargoTarget} --release
     runHook postBuild
   '';
