@@ -1,5 +1,7 @@
 # wwn-phoon-rs
 
+[![CI](https://github.com/Wawona/wwn-phoon-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/Wawona/wwn-phoon-rs/actions/workflows/ci.yml)
+
 An independent, dependency-free **Rust** implementation that reproduces the
 behavior and terminal output of the historical [`phoon`](https://acme.com/software/phoon/)
 moon-phase utility by Jef Poskanzer.
